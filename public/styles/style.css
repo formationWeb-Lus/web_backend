@@ -1,4 +1,4 @@
-/* Mobile first */
+
 body {
   font-family: Arial, sans-serif;
   color: #333;
@@ -50,7 +50,7 @@ main {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo ou nom du site */
+
 .siteName a {
   color: #ffffff;
   font-size: 1.8rem;
@@ -58,7 +58,7 @@ main {
   text-decoration: none;
 }
 
-/* Bouton "My Account" pour mobile */
+
 #tools a {
   display: inline-block;
   background-color: transparent;
@@ -77,7 +77,7 @@ main {
   color: #1e1e2f;
 }
 
-/* Grand écran */
+
 @media (min-width: 768px) {
   #top-header {
     flex-direction: row;
