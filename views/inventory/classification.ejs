@@ -1,0 +1,10 @@
+<!-- Section Titre -->
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+<!-- Section Message (à activer plus tard) -->
+<%# messages() %>
+<!-- Section Affichage de l'inventaire -->
+<%- grid %>

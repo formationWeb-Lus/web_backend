@@ -1,45 +1,52 @@
-/* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
- *******************************************/
-
-/* ***********************
- * Require Statements
- *************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
-const app = express()
-const static = require("./routes/static")
+const baseController = require("./controllers/baseController") 
+const pool = require("./database") // ✅ fixed
+const utilities = require("./utilities")
+const inventoryRoute = require('./routes/inventoryRoute');
+const app = express() 
 
 /* ***********************
  * View Engine and Layouts
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout")
+
+/* ***********************
+ * Middleware to inject nav
+ *************************/
+app.use(async (req, res, next) => {
+  try {
+    const nav = await utilities.getNav()
+    res.locals.nav = nav
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
 
 /* ***********************
  * Static Routes
  *************************/
-app.use(static)
+app.use(express.static("public")) // ✅ fixed
+app.use("/inv", inventoryRoute)
 
 /* ***********************
  * Application Routes
  *************************/
-app.get("/", (req, res) => {
-  res.render("index", { title: "Home" })
-})
+app.get("/", baseController.buildHome)
 
 /* ***********************
- * Local Server Information
+ * Local Server Info
  *************************/
-const port = process.env.PORT
-const host = process.env.HOST
+const port = process.env.PORT || 3000
+const host = process.env.HOST || "localhost"
 
 /* ***********************
  * Start Server
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
+  console.log(`App listening at http://${host}:${port}`)
 })

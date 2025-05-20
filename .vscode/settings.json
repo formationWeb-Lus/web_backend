@@ -1,6 +1,5 @@
 {
     "sqltools.connections": [
-        
         {
             "pgOptions": {
                 "ssl": {
@@ -11,9 +10,7 @@
             "server": "localhost",
             "driver": "PostgreSQL",
             "name": "render.com",
-            "database": "cse340_9kr9",
-            "username": "cse340",
-            "connectString": "postgresql://cse340:Mp0b5Xhn6nk1MpTQBRgMsLZHej2hqDQn@dpg-d0de796uk2gs73d115ug-a.frankfurt-postgres.render.com/cse340_9kr9"
+            "connectString": "postgresql://cse340:6wocQ5aarZpI6u4OHi3cbCcbDQHeOUJI@dpg-d0iad824d50c73b91asg-a.frankfurt-postgres.render.com/cse340_g56i"
         }
     ]
 }
