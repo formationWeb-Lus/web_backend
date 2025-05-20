@@ -6,6 +6,7 @@ async function buildClassificationView(req, res) {
 
   // On construit la grille HTML (tu peux améliorer le style plus tard)
   let grid = '<ul class="inventory-list">'
+  console.log(data.rows)
   data.rows.forEach(vehicle => {
     grid += `
       <li>
