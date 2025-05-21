@@ -46,7 +46,7 @@ UPDATE accounts
 SET account_type = 'Administrateur'
 WHERE email = 'tony@starkent.com';
 
--- 3. Supprimer Tony Stark
+
 DELETE FROM accounts
 WHERE email = 'tony@starkent.com';
 
