@@ -1,11 +1,11 @@
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
-const baseController = require("./database/baseController") 
-const pool = require("./database") // ✅ fixed
+const baseController = require("./controllers/basecontroller")
 const utilities = require("./utilities")
-const inventoryRoute = require('./routes/inventoryRoute');
-const app = express() 
+const inventoryRoute = require("./routes/inventoryRoute")
+
+const app = express()
 
 /* ***********************
  * View Engine and Layouts
@@ -30,12 +30,12 @@ app.use(async (req, res, next) => {
 /* ***********************
  * Static Routes
  *************************/
-app.use(express.static("public")) // ✅ fixed
-app.use("/inv", inventoryRoute)
+app.use(express.static("public"))
 
 /* ***********************
- * Application Routes
+ * Routes
  *************************/
+app.use("/inv", inventoryRoute)
 app.get("/", baseController.buildHome)
 
 /* ***********************
@@ -43,10 +43,6 @@ app.get("/", baseController.buildHome)
  *************************/
 const port = process.env.PORT || 3000
 const host = process.env.HOST || "localhost"
-
-/* ***********************
- * Start Server
- *************************/
 app.listen(port, () => {
   console.log(`App listening at http://${host}:${port}`)
 })

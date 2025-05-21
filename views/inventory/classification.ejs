@@ -1,10 +1,17 @@
-<!-- Section Titre -->
-<% if (title) { %>
-  <h1><%= title %></h1>
-<% } else {
-  res.redirect('/')
-} %>
-<!-- Section Message (à activer plus tard) -->
-<%# messages() %>
-<!-- Section Affichage de l'inventaire -->
-<%- grid %>
+<% items.forEach(item => { %>
+  <div class="vehicle-card">
+    <h2><%= item.make %> <%= item.model %></h2>
+
+    <p><strong>Year:</strong> <%= item.year %></p>
+    <p><strong>Description:</strong> <%= item.description %></p>
+    <p><strong>Price:</strong> $<%= item.price ? item.price.toLocaleString() : "N/A" %></p>
+
+    <img 
+  src="/images/vehicles/<%= item.image %>" 
+  alt="<%= item.make %> <%= item.model %>" 
+  style="max-width: 300px; height: auto; border-radius: 8px; margin-top: 10px;"
+>
+
+  </div>
+  <hr>
+<% }) %>

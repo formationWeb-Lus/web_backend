@@ -1,18 +1,30 @@
 const pool = require("../database")
 
-// Récupère toutes les classifications
-async function getClassifications() {
-  const data = await pool.query("SELECT * FROM classification ORDER BY classification_name")
-  return data
+/* ***************************
+ *  Get all classification data
+ * ************************** */
+async function getClassifications(){
+  return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
 }
 
-// 🔧 Récupère tous les véhicules selon l'ID de classification
+/* ***************************
+ *  Get all inventory items and classification_name by classification_id
+ * ************************** */
 async function getInventoryByClassificationId(classification_id) {
-  const data = await pool.query("SELECT * FROM inventory WHERE classification_id = $1", [classification_id])
-  return data
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.inventory AS i 
+      JOIN public.classification AS c 
+      ON i.classification_id = c.classification_id 
+      WHERE i.classification_id = $1`,
+      [classification_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getInventoryByClassificationId error " + error)
+  }
 }
 
-// ✅ Export des fonctions
 module.exports = {
   getClassifications,
   getInventoryByClassificationId
