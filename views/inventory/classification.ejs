@@ -1,17 +1,38 @@
-<% items.forEach(item => { %>
-  <div class="vehicle-card">
-    <h2><%= item.make %> <%= item.model %></h2>
+<div class="vehicle-grid">
+  <% inventory.forEach(vehicle => { %>
+    <div class="vehicle-summary">
+      <div class="vehicle-image">
+        <img src="/<%= vehicle.inv_image.replace('public/', '') %>" 
+             alt="<%= vehicle.make %> <%= vehicle.model %>">
+      </div>
 
-    <p><strong>Year:</strong> <%= item.year %></p>
-    <p><strong>Description:</strong> <%= item.description %></p>
-    <p><strong>Price:</strong> $<%= item.price ? item.price.toLocaleString() : "N/A" %></p>
+      <div class="vehicle-info">
+        <h2>
+          <a href="#" onclick="toggleDetails('desc-<%= vehicle.inventory_id %>'); return false;">
+            <%= vehicle.make %> <%= vehicle.model %> (<%= vehicle.year %>)
+          </a>
+        </h2>
 
-    <img 
-  src="/images/vehicles/<%= item.image %>" 
-  alt="<%= item.make %> <%= item.model %>" 
-  style="max-width: 300px; height: auto; border-radius: 8px; margin-top: 10px;"
->
+        <p><strong>Price:</strong> $<%= vehicle.price.toLocaleString() %></p>
 
-  </div>
-  <hr>
-<% }) %>
+        <div class="vehicle-links" style="margin: 10px 0;">
+          <p><a href="tel:+1234567890" class="vehicle-link">📞 Call Us</a></p>
+          <p><a href="/contact" class="vehicle-link">📍 Visit Us</a></p>
+        </div>
+
+        <div id="desc-<%= vehicle.inventory_id %>" class="description" style="display: none;">
+          <p><strong>Description:</strong> <%= vehicle.description %></p>
+          <p><strong>Color:</strong> <%= vehicle.color %></p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+</div>
+
+<script>
+  function toggleDetails(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+  }
+</script>
+

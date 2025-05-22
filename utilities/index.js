@@ -1,29 +1,13 @@
-const invModel = require("../models/inventoryModel")
-
-const Util = {}
-
-/* ************************
- * Nav HTML List
- ************************** */
-Util.getNav = async function () {
-  let data = await invModel.getClassifications()
-  let list = "<ul>"
-  list += '<li><a href="/" title="Home page">Home</a></li>'
-  data.rows.forEach((row) => {
-    list += `<li><a href="/inv/type/${row.classification_id}" title="See our inventory of ${row.classification_name} vehicles">${row.classification_name}</a></li>`
-  })
-  list += "</ul>"
-  return list
-}
+const Util = {};
 
 /* ************************
  * Build classification grid HTML
  ************************** */
 Util.buildClassificationGrid = async function (data) {
-  let grid = ""
+  let grid = "";
 
   if (data.length > 0) {
-    grid = '<ul id="inv-display">'
+    grid = '<ul id="inv-display">';
     data.forEach(vehicle => {
       grid += `<li>
         <a href="/inv/detail/${vehicle.inv_id}" title="View ${vehicle.inv_make} ${vehicle.inv_model} details">
@@ -38,14 +22,43 @@ Util.buildClassificationGrid = async function (data) {
           </h2>
           <span>$${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</span>
         </div>
-      </li>`
-    })
-    grid += '</ul>'
+      </li>`;
+    });
+    grid += "</ul>";
   } else {
-    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
 
-  return grid
-}
+  return grid;
+};
 
-module.exports = Util
+/* ************************
+ * Build navigation bar HTML (with logo and white links)
+ ************************** */
+Util.getNav = async function () {
+  const invModel = require("../models/inventoryModel");
+  let data = await invModel.getClassifications();
+  
+  let nav = `
+  <div class="nav-container">
+    <div class="nav-logo">
+      <a href="/" title="Return to home page">
+        <img src="/images/upgrades/flame.jpg" alt="CSE Motors Logo">
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/" title="Home page">Home</a></li>
+  `;
+
+  data.rows.forEach(row => {
+    nav += `<li><a href="/inv/type/${row.classification_id}" title="See our inventory of ${row.classification_name} vehicles">${row.classification_name}</a></li>`;
+  });
+
+  nav += `
+    </ul>
+  </div>
+  `;
+  return nav;
+};
+
+module.exports = Util;

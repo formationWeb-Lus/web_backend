@@ -1,21 +1,18 @@
-const inventoryModel = require("../models/inventoryModel")
+const invModel = require("../models/inventoryModel");
 
-async function buildClassificationView(req, res) {
-  const classificationId = req.params.classificationId
+async function buildClassificationView(req, res, next) {
   try {
-    const data = await inventoryModel.getInventoryByClassificationId(classificationId)
-    res.render("inventory/classification", {
-  title: "Vehicles by Classification",
-  items: data, // <-- maintenant le nom correspond à ta vue
-})
-
-    
+    const classificationId = req.params.classificationId;
+    const data = await invModel.getInventoryByClassificationId(classificationId);
+    res.render("./inventory/classification", {
+      title: "Vehicle Classification",
+      inventory: data,
+    });
   } catch (error) {
-    console.error("Error building classification view:", error)
-    res.status(500).send("Server Error")
+    next(error);
   }
 }
 
 module.exports = {
-  buildClassificationView,
-}
+  buildClassificationView
+};
