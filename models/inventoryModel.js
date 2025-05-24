@@ -1,4 +1,5 @@
-const pool = require("../database")
+const pool = require("../database/connection")
+
 
 /* ***************************
  *  Get all classification data

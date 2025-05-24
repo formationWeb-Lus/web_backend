@@ -1,6 +1,8 @@
+require('dotenv').config()
+
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
+
 const baseController = require("./controllers/basecontroller")
 const utilities = require("./utilities")
 const inventoryRoute = require("./routes/inventoryRoute")
