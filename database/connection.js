@@ -1,9 +1,9 @@
 // database/connection.js
-
 const { Pool } = require('pg')
 
+// Assure-toi que DATABASE_URL est bien définie dans Render et en local via un .env
 const pool = new Pool({
-  connectionString: 'postgresql://cse340:6wocQ5aarZpI6u4OHi3cbCcbDQHeOUJI@dpg-d0iad824d50c73b91asg-a.frankfurt-postgres.render.com/cse340_g56i',
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
