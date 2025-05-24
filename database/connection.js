@@ -1,13 +1,12 @@
 const { Pool } = require('pg')
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,  // utilise la variable d'env
+  connectionString: process.env.DATABASE_URL,
   ssl: {
-    require: true,            // force l'utilisation de SSL
-    rejectUnauthorized: false // accepte les certificats auto-signés (Render)
+    require: true,
+    rejectUnauthorized: false
   }
 })
 
 module.exports = pool
-
 
