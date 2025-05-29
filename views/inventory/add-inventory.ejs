@@ -1,0 +1,87 @@
+<main>
+  <h1>Add New Vehicle</h1>
+
+  <% if (message) { %>
+    <div class="flash-message success"><%= message %></div>
+  <% } %>
+
+  <% if (errors && errors.length > 0) { %>
+    <div class="flash-message error">
+      <p>Please fix the following errors:</p>
+      <ul class="errors">
+        <% errors.forEach(error => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/inv/add-inventory" method="post" novalidate>
+    <!-- Classification -->
+    <label for="classification_id">Classification</label>
+    <select id="classification_id" name="classification_id" required>
+      <option value="">-- Select a Classification --</option>
+      <% classificationList.forEach(item => { %>
+        <option value="<%= item.classification_id %>" 
+          <%= inventory && inventory.classification_id == item.classification_id ? "selected" : "" %>>
+          <%= item.classification_name %>
+        </option>
+      <% }) %>
+    </select>
+
+    <!-- Make -->
+    <label for="make">Make</label>
+    <input type="text" id="make" name="make" required 
+           value="<%= inv?.make || '' %>" 
+           placeholder="e.g. Toyota">
+
+    <!-- Model -->
+    <label for="model">Model</label>
+    <input type="text" id="model" name="model" required 
+           value="<%= inventory?.model || '' %>" 
+           placeholder="e.g. Corolla">
+
+    <!-- Description -->
+    <label for="description">Description</label>
+    <textarea id="description" name="description" required 
+              placeholder="Provide a short description..."><%= inventory?.description || '' %></textarea>
+
+    <!-- Image Path -->
+    <label for="inv_image">Image Path</label>
+    <input type="text" id="inv_image" name="inv_image" required 
+           value="<%= inventory?.inv_image || '' %>" 
+           placeholder="/images/vehicles/image.jpg">
+
+    <!-- Thumbnail Path -->
+    <label for="inv_thumbnail">Thumbnail Path</label>
+    <input type="text" id="inv_thumbnail" name="inv_thumbnail" required 
+           value="<%= inventory?.inv_thumbnail || '' %>" 
+           placeholder="/images/vehicles/thumb.jpg">
+
+    <!-- Price -->
+    <label for="price">Price ($)</label>
+    <input type="number" id="price" name="price" required min="0" step="0.01"
+           value="<%= inventory?.price || '' %>" 
+           placeholder="e.g. 25000">
+
+    <!-- Year -->
+    <label for="year">Year</label>
+    <input type="number" id="year" name="year" required min="1900" max="2100"
+           value="<%= inventory?.year || '' %>" 
+           placeholder="e.g. 2024">
+
+    <!-- Miles -->
+    <label for="miles">Miles</label>
+    <input type="number" id="miles" name="miles" required min="0"
+           value="<%= inventory?.miles || '' %>" 
+           placeholder="e.g. 10000">
+
+    <!-- Color -->
+    <label for="color">Color</label>
+    <input type="text" id="color" name="color" required 
+           value="<%= inventory?.color || '' %>" 
+           placeholder="e.g. Red">
+
+    <button type="submit" class="btn">Add Vehicle</button>
+  </form>
+</main>

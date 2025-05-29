@@ -1,3 +1,16 @@
-<nav>
-  <%- nav %>
+<nav class="nav-container">
+  <div class="nav-logo">
+    <a href="/" title="Return to home page">
+      <img src="/images/upgrades/flame.jpg" alt="CSE Motors Logo">
+    </a>
+  </div>
+  <ul class="nav-links">
+    <% if (Array.isArray(nav) && nav.length) { %>
+      <% nav.forEach(item => { %>
+        <li><a href="<%= item.href %>"><%= item.name %></a></li>
+      <% }) %>
+    <% } else { %>
+      <li>No navigation items found</li>
+    <% } %>
+  </ul>
 </nav>

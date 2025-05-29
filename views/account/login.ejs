@@ -1,0 +1,30 @@
+<main class="login-wrapper">
+  <div class="container">
+    <% if (messages && messages.notice) { %>
+      <div class="flash-notice">
+        <%= messages.notice %>
+      </div>
+    <% } %>
+
+    <form action="/login" method="post">
+      <label for="loginEmail">Email:</label>
+      <input type="email" name="account_email" id="loginEmail" required placeholder="Enter a valid email address">
+
+      <label for="loginPassword">Password:</label>
+      <span class="password-requirements">
+        Passwords must be at least 12 characters long and must include at least 1 number, 1 uppercase letter, and 1 special character.
+      </span>
+      <div class="password-toggle-wrapper">
+        <input type="password" name="account_password" id="loginPassword" required
+          pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+        <button type="button" id="toggleLoginPassword">Show password</button>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="register-link">
+      Not registered yet? <a href="/account/register">Start to register here</a>.
+    </p>
+  </div>
+</main>
