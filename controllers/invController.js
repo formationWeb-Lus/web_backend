@@ -1,10 +1,8 @@
 const utilities = require("../utilities");
-const invModel = require("../models/inventoryModel");
-const { body, validationResult } = require("express-validator");
+const invModel = require("../models/invModel");
+const { validationResult } = require("express-validator");
 
-/* ===========================
-   Vue par classification
-=========================== */
+// View: Inventory by classification
 async function buildClassificationView(req, res, next) {
   try {
     const classificationId = req.params.classificationId;
@@ -20,9 +18,7 @@ async function buildClassificationView(req, res, next) {
   }
 }
 
-/* ===========================
-   Vue de gestion d'inventaire
-=========================== */
+// View: Inventory management page
 async function buildManagement(req, res) {
   const nav = await utilities.getNav();
   res.render("inventory/management", {
@@ -33,9 +29,7 @@ async function buildManagement(req, res) {
   });
 }
 
-/* ===========================
-   Formulaire ajout de classification
-=========================== */
+// View: Add Classification
 async function buildAddClassification(req, res) {
   const nav = await utilities.getNav();
   res.render("inventory/add-classification", {
@@ -46,6 +40,7 @@ async function buildAddClassification(req, res) {
   });
 }
 
+// Process: Add Classification
 async function addClassification(req, res) {
   const nav = await utilities.getNav();
   const { classification_name } = req.body;
@@ -76,26 +71,22 @@ async function addClassification(req, res) {
   }
 }
 
-/* ===========================
-   Formulaire ajout de véhicule
-=========================== */
+// View: Add Vehicle Form
 async function buildAddInventory(req, res) {
   const nav = await utilities.getNav();
   const classifications = await invModel.getClassifications();
 
-  res.render("inv/add-inventory", {
+  res.render("inventory/add-inventory", {
     title: "Add New Vehicle",
     nav,
     classificationList: classifications,
     message: req.flash("message"),
     errors: null,
-    inventory: {} // Pour pré-remplir le formulaire en cas d’erreur
+    inventory: {},
   });
 }
 
-/* ===========================
-   Traiter l'ajout de véhicule
-=========================== */
+// Process: Add Vehicle
 async function addInventory(req, res) {
   const nav = await utilities.getNav();
   const classifications = await invModel.getClassifications();
@@ -115,7 +106,7 @@ async function addInventory(req, res) {
   };
 
   if (!errors.isEmpty()) {
-    return res.render("inv/add-inventory", {
+    return res.render("inventory/add-inventory", {
       title: "Add New Vehicle",
       nav,
       classificationList: classifications,
@@ -132,7 +123,7 @@ async function addInventory(req, res) {
     return res.redirect("/inv");
   } else {
     const message = "Failed to add vehicle.";
-    res.render("inv/add-inventory", {
+    res.render("inventory/add-inventory", {
       title: "Add New Vehicle",
       nav,
       classificationList: classifications,

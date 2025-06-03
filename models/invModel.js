@@ -1,13 +1,9 @@
 const pool = require("../database/connection");
 
-/* ***************************
- *  Get all classification data
- * ************************** */
+// Get classifications
 async function getClassifications() {
   try {
-    const result = await pool.query(
-      "SELECT * FROM public.classification ORDER BY classification_name"
-    );
+    const result = await pool.query("SELECT * FROM public.classification ORDER BY classification_name");
     return result.rows;
   } catch (error) {
     console.error("getClassifications error:", error);
@@ -15,9 +11,7 @@ async function getClassifications() {
   }
 }
 
-/* ***************************
- *  Get all inventory items with classification_name by classification_id
- * ************************** */
+// Get inventory by classification
 async function getInventoryByClassificationId(classification_id) {
   try {
     const sql = `
@@ -36,13 +30,10 @@ async function getInventoryByClassificationId(classification_id) {
   }
 }
 
-/* ***************************
- *  Add a new classification
- * ************************** */
+// Add classification
 async function addClassification(classification_name) {
   try {
-    const sql =
-      "INSERT INTO public.classification (classification_name) VALUES ($1) RETURNING *";
+    const sql = "INSERT INTO public.classification (classification_name) VALUES ($1) RETURNING *";
     const result = await pool.query(sql, [classification_name]);
     return result.rows[0];
   } catch (error) {
@@ -51,9 +42,7 @@ async function addClassification(classification_name) {
   }
 }
 
-/* ***************************
- *  Add a new vehicle to inventory
- * ************************** */
+// Add inventory item
 async function addInventory(data) {
   try {
     const sql = `
@@ -83,7 +72,6 @@ async function addInventory(data) {
       data.miles,
       data.color,
     ];
-
     const result = await pool.query(sql, values);
     return result.rows[0];
   } catch (error) {

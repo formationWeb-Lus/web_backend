@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const invController = require("../controllers/inventorycontroller");
+const invController = require("../controllers/invController");
 const { body } = require("express-validator");
 
-// Validation rules for adding a vehicle
+// Validation rules
 const vehicleValidationRules = [
   body("classification_id").notEmpty().withMessage("Classification is required"),
   body("make").trim().notEmpty().withMessage("Make is required"),
@@ -17,34 +17,14 @@ const vehicleValidationRules = [
   body("color").trim().notEmpty().withMessage("Color is required"),
 ];
 
-// ==========================
-// Routes principales
-// ==========================
-
-// Vue de gestion
+// Inventory Management Home
 router.get("/", invController.buildManagement);
 
-// Vue par classification
+// View by classification
 router.get("/type/:classificationId", invController.buildClassificationView);
 
-// ==========================
-// Ajout de véhicule
-// ==========================
-
-// Affiche le formulaire
-router.get("/add-inventory", invController.buildAddInventory);
-
-// Traite le formulaire avec validation
-router.post("/add-inventory", vehicleValidationRules, invController.addInventory);
-
-// ==========================
-// Ajout de classification
-// ==========================
-
-// Affiche le formulaire
+// Add classification
 router.get("/add-classification", invController.buildAddClassification);
-
-// Traite le formulaire avec validation
 router.post(
   "/add-classification",
   body("classification_name")
@@ -53,5 +33,9 @@ router.post(
     .matches(/^[A-Za-z0-9]+$/).withMessage("No spaces or special characters allowed"),
   invController.addClassification
 );
+
+// Add vehicle
+router.get("/add-inventory", invController.buildAddInventory);
+router.post("/add-inventory", vehicleValidationRules, invController.addInventory);
 
 module.exports = router;

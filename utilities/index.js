@@ -37,7 +37,7 @@ Util.buildClassificationGrid = async function (data) {
  * Returns an array of links for use in the navigation.ejs
  ************************** */
 Util.getNav = async function () {
-  const invModel = require("../models/inventoryModel")
+  const invModel = require("../models/invModel")
   const data = await invModel.getClassifications()
 
   const nav = [{ name: "Home", href: "/" }]
