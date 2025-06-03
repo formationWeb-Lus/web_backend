@@ -1,5 +1,5 @@
 const utilities = require("../utilities");
-const accountModel = require("../models/account-Model");
+const accountModel = require("../models/account-model");
 const bcrypt = require("bcryptjs");
 
 async function buildLogin(req, res, next) {
