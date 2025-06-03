@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
 const expressLayouts = require("express-ejs-layouts");
 const pool = require("./database");
 const invRoute = require("./routes/inventoryRoute");
@@ -20,14 +21,15 @@ app.set("layout", "./layouts/layout");
 // Middleware session avec store Postgres
 app.use(
   session({
-    store: new (require("connect-pg-simple")(session))({
+    store: new pgSession({
       pool,
       createTableIfMissing: false,
     }),
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,              // false recommandé avec pg session
+    saveUninitialized: false,   // false pour ne pas créer de session vide inutilement
     name: "sessionId",
+    cookie: { secure: false },  // true si HTTPS en prod
   })
 );
 
@@ -52,13 +54,12 @@ app.use(async (req, res, next) => {
 // Fichiers statiques
 app.use(express.static("public"));
 
-// Middleware pour lire le corps des requêtes (formulaires, JSON)
+// Middleware pour parser corps de requêtes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/inv", invRoute);
-
 app.use("/account", accountRoute);
 app.get("/", baseController.buildHome);
 
