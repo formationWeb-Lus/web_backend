@@ -12,6 +12,14 @@ const utilities = require("./utilities");
 
 const app = express();
 
+const getNav = require('./utilities/navigation');
+
+app.use(async (req, res, next) => {
+  res.locals.nav = await getNav();
+  next();
+});
+
+
 // Middleware session - une seule déclaration
 app.use(session({
   store: new pgSession({
