@@ -1,11 +1,9 @@
-require("dotenv").config();
-
 const express = require("express");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const expressLayouts = require("express-ejs-layouts");
 const pool = require("./database");
-const invRoute = require("./routes/inventoryRoute");
+const invRoute = require("./routes/inventoryRoute");        // garder une seule déclaration ici
 const accountRoute = require("./routes/accountRoute");
 const baseController = require("./controllers/basecontroller");
 const utilities = require("./utilities");
@@ -14,11 +12,12 @@ const app = express();
 
 const getNav = require('./utilities/navigation');
 
-app.use(async (req, res, next) => {
-  res.locals.nav = await getNav();
-  next();
-});
+// Middleware parsing (à mettre avant les routes)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Static files
+app.use(express.static("public"));
 
 // Middleware session - une seule déclaration
 app.use(session({
@@ -55,13 +54,6 @@ app.use(async (req, res, next) => {
     next(error);
   }
 });
-
-// Middleware parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Static files
-app.use(express.static("public"));
 
 // Routes
 app.use("/inv", invRoute);

@@ -37,6 +37,7 @@ async function buildAddClassification(req, res) {
     nav,
     message: req.flash("message"),
     errors: null,
+    classification_name: "", // Valeur vide par défaut
   });
 }
 
@@ -52,6 +53,7 @@ async function addClassification(req, res) {
       nav,
       message: null,
       errors: errors.array(),
+      classification_name, // pré-remplir champ
     });
   }
 
@@ -67,6 +69,7 @@ async function addClassification(req, res) {
       nav,
       message,
       errors: null,
+      classification_name, // pré-remplir champ même en cas d'erreur d'insertion
     });
   }
 }
@@ -82,7 +85,7 @@ async function buildAddInventory(req, res) {
     classificationList: classifications,
     message: req.flash("message"),
     errors: null,
-    inventory: {},
+    inventory: {}, // vide par défaut
   });
 }
 
@@ -112,7 +115,7 @@ async function addInventory(req, res) {
       classificationList: classifications,
       message: null,
       errors: errors.array(),
-      inventory,
+      inventory, // pré-remplir tous les champs
     });
   }
 
@@ -129,7 +132,7 @@ async function addInventory(req, res) {
       classificationList: classifications,
       message,
       errors: null,
-      inventory,
+      inventory, // réaffiche les champs même si erreur
     });
   }
 }

@@ -1,5 +1,6 @@
-const accountModel = require("../models/account-model");
 const utilities = require("../utilities");
+const accountModel = require("../models/account-Model");
+const bcrypt = require("bcryptjs");
 
 async function buildLogin(req, res, next) {
   try {
@@ -8,7 +9,7 @@ async function buildLogin(req, res, next) {
       title: "Login",
       nav,
       errors: null,
-      notice: req.flash("notice") // ← récupère le message flash ici
+      messages: { notice: req.flash("notice") }
     });
   } catch (err) {
     next(err);
@@ -28,9 +29,6 @@ async function buildRegister(req, res, next) {
   }
 }
 
-/* ****************************************
-*  Process Registration
-* *************************************** */
 async function registerAccount(req, res) {
   try {
     let nav = await utilities.getNav();
@@ -43,13 +41,11 @@ async function registerAccount(req, res) {
       account_password
     );
 
-    // 👍 Si succès
     if (regResult && regResult.rows && regResult.rows.length > 0) {
       req.flash("notice", `Congratulations, you're registered ${account_firstname}. Please log in.`);
-      return res.redirect("/account/login"); // ← ici on fait un redirect, pas un render
+      return res.redirect("/account/login");
     }
 
-    // ❌ Sinon erreur
     req.flash("notice", "Sorry, the registration failed.");
     return res.status(501).render("account/register", {
       title: "Register",
@@ -68,8 +64,54 @@ async function registerAccount(req, res) {
   }
 }
 
+async function accountLogin(req, res) {
+  const { account_email, account_password } = req.body;
+  const nav = await utilities.getNav();
+
+  try {
+    const accountData = await accountModel.getAccountByEmail(account_email);
+
+    if (!accountData) {
+      req.flash("notice", "Email not found.");
+      return res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        messages: { notice: req.flash("notice") }
+      });
+    }
+
+    const match = await bcrypt.compare(account_password, accountData.account_password);
+
+    if (!match) {
+      req.flash("notice", "Incorrect password.");
+      return res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        messages: { notice: req.flash("notice") }
+      });
+    }
+
+    req.session.account = accountData;
+    req.flash("notice", "You're now logged in.");
+    return res.redirect("/inv");
+
+  } catch (error) {
+    console.error("Login error:", error);
+    req.flash("notice", "Login failed. Please try again.");
+    return res.status(500).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      messages: { notice: req.flash("notice") }
+    });
+  }
+}
+
 module.exports = {
   buildLogin,
   buildRegister,
-  registerAccount
+  registerAccount,
+  accountLogin
 };

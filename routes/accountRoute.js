@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express') 
 const router = express.Router()
 const utilities = require('../utilities')
 const accountController = require('../controllers/accountController')
@@ -13,9 +13,17 @@ router.get('/register', utilities.handleErrors(accountController.buildRegister))
 // Traitement de l'inscription avec validation
 router.post(
   "/register",
-  validate.registrationRules(), // Applique les règles
-  validate.checkRegData,        // Vérifie les erreurs (attention au nom)
-  utilities.handleErrors(accountController.registerAccount) // Enregistre l'utilisateur
+  validate.registrationRules(),
+  validate.checkRegData,
+  utilities.handleErrors(accountController.registerAccount)
+)
+
+// Traitement de la connexion
+router.post(
+  "/login",
+  validate.loginRules(),     // facultatif mais recommandé
+  validate.checkLoginData,   // facultatif
+  utilities.handleErrors(accountController.accountLogin)
 )
 
 // Redirection vers /login si /account est accédé directement
