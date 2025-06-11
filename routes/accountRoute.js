@@ -1,34 +1,42 @@
-const express = require('express') 
-const router = express.Router()
-const utilities = require('../utilities')
-const accountController = require('../controllers/accountController')
-const validate = require("../utilities/account-validation")
+const express = require('express');
+const router = express.Router();
 
-// Route vers la page de login
-router.get('/login', utilities.handleErrors(accountController.buildLogin))
+const utilities = require('../utilities');
+const accountController = require('../controllers/accountController');
+const regvalidate = require("../utilities/account-validation");
+const { checkEmployeeOrAdmin } = require("../middleware/checkAuth");
 
-// Route vers la page d'inscription
-router.get('/register', utilities.handleErrors(accountController.buildRegister))
+// 🔐 Route protégée par JWT : accès réservé aux employés/admins
+router.get("/manage", checkEmployeeOrAdmin, accountController.buildAccountManagement);
 
-// Traitement de l'inscription avec validation
+// Affiche le formulaire de login
+router.get('/login', utilities.handleErrors(accountController.buildLogin));
+
+// Affiche le formulaire d'inscription
+router.get('/register', utilities.handleErrors(accountController.buildRegister));
+
+// Déconnecte l'utilisateur (supprime le cookie JWT)
+router.get('/logout', utilities.handleErrors(accountController.logoutAccount));
+
+// Enregistre un nouvel utilisateur après validation
 router.post(
   "/register",
-  validate.registrationRules(),
-  validate.checkRegData,
+  regvalidate.registrationRules(),
+  regvalidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
-)
+);
 
-// Traitement de la connexion
+// Connecte l'utilisateur après validation
 router.post(
   "/login",
-  validate.loginRules(),     // facultatif mais recommandé
-  validate.checkLoginData,   // facultatif
+  regvalidate.loginRules(),
+  regvalidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin)
-)
+);
 
-// Redirection vers /login si /account est accédé directement
+// Redirige vers /login si /account est accédé sans route spécifique
 router.get('/', (req, res) => {
-  res.redirect('/account/login')
-})
+  res.redirect('/account/login');
+});
 
-module.exports = router
+module.exports = router;

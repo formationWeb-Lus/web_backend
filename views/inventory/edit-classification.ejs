@@ -1,0 +1,12 @@
+<%- include("../partials/header") %>
+
+<h1>Edit Classification</h1>
+
+<form method="POST" action="/inv/edit/type/<%= classification.classification_id %>">
+  <label for="classification_name">Classification Name</label>
+  <input type="text" id="classification_name" name="classification_name" value="<%= classification.classification_name %>" required>
+
+  <button type="submit">Update</button>
+</form>
+
+<%- include("../partials/footer") %>

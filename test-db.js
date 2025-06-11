@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
+console.log(process.env.ACCESS_TOKEN_SECRET);
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -18,5 +19,13 @@ async function test() {
     await pool.end();
   }
 }
+
+const Util = require("./utilities");
+
+(async () => {
+  const nav = await Util.getNav();
+  console.log(nav);
+})();
+
 
 test();

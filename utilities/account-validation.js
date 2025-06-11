@@ -10,21 +10,25 @@ validate.registrationRules = () => {
       .trim()
       .notEmpty().withMessage("First name is required.")
       .isAlpha().withMessage("First name must contain only letters."),
+
     body("account_lastname")
       .trim()
       .notEmpty().withMessage("Last name is required.")
       .isAlpha().withMessage("Last name must contain only letters."),
+
     body("account_email")
       .trim()
       .notEmpty().withMessage("Email is required.")
       .isEmail().withMessage("Invalid email format.")
       .normalizeEmail(),
+
     body("account_password")
       .trim()
       .notEmpty().withMessage("Password is required.")
-      .isLength({ min: 8 }).withMessage("Password must be at least 8 characters.")
-      .matches(/[0-9]/).withMessage("Password must contain a number.")
-      .matches(/[A-Za-z]/).withMessage("Password must contain a letter."),
+      .isLength({ min: 12 }).withMessage("Password must be at least 12 characters.")
+      .matches(/[0-9]/).withMessage("Password must contain at least one number.")
+      .matches(/[A-Z]/).withMessage("Password must contain at least one uppercase letter.")
+      .matches(/[^A-Za-z0-9]/).withMessage("Password must contain at least one special character.")
   ];
 };
 
@@ -36,7 +40,7 @@ validate.checkRegData = async (req, res, next) => {
     res.render("account/register", {
       title: "Register",
       nav,
-      errors,
+      errors: errors.array(), // ← pour EJS
       account_firstname: req.body.account_firstname,
       account_lastname: req.body.account_lastname,
       account_email: req.body.account_email,
@@ -54,9 +58,10 @@ validate.loginRules = () => {
       .notEmpty().withMessage("Email is required.")
       .isEmail().withMessage("Invalid email format.")
       .normalizeEmail(),
+
     body("account_password")
       .trim()
-      .notEmpty().withMessage("Password is required."),
+      .notEmpty().withMessage("Password is required.")
   ];
 };
 
@@ -68,7 +73,7 @@ validate.checkLoginData = async (req, res, next) => {
     res.render("account/login", {
       title: "Login",
       nav,
-      errors,
+      errors: errors.array(),
       account_email: req.body.account_email,
     });
     return;

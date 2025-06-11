@@ -1,0 +1,13 @@
+<main>
+  <h1><%= title %></h1>
+
+  <% if (inventory.length > 0) { %>
+    <ul>
+      <% inventory.forEach(inventory => { %>
+        <li><%= inventory.make %> <%= inventory.model %> - <%= inventory.year %></li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No vehicles found for this classification.</p>
+  <% } %>
+</main>

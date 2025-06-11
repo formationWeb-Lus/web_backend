@@ -1,4 +1,4 @@
-<main>
+<main> 
   <h1>Inventory Management</h1>
 
   <% if (message) { %>
@@ -8,7 +8,21 @@
   <% } %>
 
   <ul>
-    <li><a href="/inventory/add-classification">Add New Classification</a></li>
+    <li><a href="/inv/add-classification">Add New Classification</a></li>
     <li><a href="/inv/add-inventory">Add New Inventory</a></li>
   </ul>
+
+  <hr>
+
+  <h2>Choose a classification to see those inventory items</h2>
+
+  <form action="/inv/by-classification" method="get">
+    <label for="classification_id">Classification:</label>
+    <select name="classification_id" id="classification_id">
+      <% classifications.forEach(classification => { %>
+        <option value="<%= classification.classification_id %>"><%= classification.classification_name %></option>
+      <% }) %>
+    </select>
+    <button type="submit">Show Vehicles</button>
+  </form>
 </main>

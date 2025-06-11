@@ -1,0 +1,56 @@
+<%- include('../partials/header', { title: 'Account Management' }) %>
+
+<main class="container">
+
+  <% if (messages.notice && messages.notice.length > 0) { %>
+    <div class="flash-message">
+      <p><%= messages.notice %></p>
+    </div>
+  <% } %>
+
+  <% if (account) { %>
+    <section class="account-info">
+      <h1>Welcome, <%= account.account_firstname %> <%= account.account_lastname %>!</h1>
+      <p><strong>Email:</strong> <%= account.account_email %></p>
+      <p><strong>Account Type:</strong> <%= account.account_type %></p>
+    </section>
+
+    <% if (account.account_type === 'Employee' || account.account_type === 'Admin') { %>
+      <section class="admin-section">
+        <h2>Administrative Options</h2>
+        <ul>
+          <li><a href="/inv/add-classification">Add New Classification</a></li>
+          <li><a href="/inv/add-inventory">Add New Inventory</a></li>
+          <li><a href="/inv/">Manage Inventory</a></li>
+          <li><a href="/reports/">View Reports</a></li>
+        </ul>
+
+        <hr>
+
+        <h3>Choose a classification to see inventory items</h3>
+        <form action="/inv/by-classification" method="get">
+          <label for="classification_id">Classification:</label>
+          <select name="classification_id" id="classification_id">
+            <% classifications.forEach(classification => { %>
+              <option value="<%= classification.classification_id %>">
+                <%= classification.classification_name %>
+              </option>
+            <% }) %>
+          </select>
+          <button type="submit">Show Vehicles</button>
+        </form>
+      </section>
+    <% } %>
+
+    <form action="/account/logout" method="get" style="margin-top: 2rem;">
+      <button type="submit" class="btn btn-logout">Logout</button>
+    </form>
+
+  <% } else { %>
+    <p>You must be logged in to view this page. <a href="/account/login">Login here</a>.</p>
+  <% } %>
+
+</main>
+
+<%- include('../partials/footer') %>
+
